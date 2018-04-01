@@ -8,7 +8,6 @@ Current file list/index:
 README.md			- This file
 
 LED_class.py		- A simple LED class definition
-
 callback_test.py	- Test file for testing call back and blocking wait_for_event calls
 
 led-selector.py		- Simple GUI for turning LEDs on/off
