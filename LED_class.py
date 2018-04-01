@@ -2,7 +2,8 @@
 # Simple class for creating LED instances. The LEDs associated with these 
 # instances can be set_on or set_off.
 
-# Planned enhancements: Will add PWM capabilities.
+# Planned enhancements: 
+#       - Add PWM capabilities and appropriate methods
 
 import RPi.GPIO as GPIO                     # Use RPi.GPIO module and reference as GPIO
 
