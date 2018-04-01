@@ -15,31 +15,31 @@ BCM_LED1 = 19   # Output GPIO for LED1
 # Function to set LEDs based on value of count
 
 def dispCount(ct):
-    ct = ct % 16                        # Set count mod 16
-    binrep = bin(int(ct))[2:].zfill(4)  # Strips 0b from string and pads with 0s...to create a 4 character string
+	ct = ct % 16                        # Set count mod 16
+	binrep = bin(int(ct))[2:].zfill(4)  # Strips 0b from string and pads with 0s...to create a 4 character string
                                         # representing the binary value of the counter
 
-    print("\n\n",binrep)                # Print the string in the console
+	print("\n\n",binrep)                # Print the string in the console
     
-    if binrep[0] == '1':                # Turn on the appropriate LEDs (where binrep contains 1 in designated position
-        led8.set_on()
-    else:
-        led8.set_off()
+	if binrep[0] == '1':                # Turn on the appropriate LEDs (where binrep contains 1 in designated position
+		led8.set_on()
+	else:
+		led8.set_off()
         
-    if binrep[1] == '1':    
-        led4.set_on()
-    else:
-        led4.set_off()
+	if binrep[1] == '1':    
+		led4.set_on()
+	else:
+		led4.set_off()
 
-    if binrep[2] == '1':
-        led2.set_on()
-    else:
-        led2.set_off()
+	if binrep[2] == '1':
+		led2.set_on()
+	else:
+		led2.set_off()
 
-    if binrep[3] == '1':
-        led1.set_on()
-    else:
-        led1.set_off()
+	if binrep[3] == '1':
+		led1.set_on()
+	else:
+		led1.set_off()
 
 # Beging main program        
         
@@ -53,24 +53,24 @@ led4 = LED_class.LED(BCM_LED4)
 led8 = LED_class.LED(BCM_LED8)    
 
 try:
-    switch_state = 0                # Track state of switch
-    counter = 0                     # Initialize counter
-    while True:                     # Loop until interrupted (Ctl-C)
-        if GPIO.input(pin)==0:      # If switch open
-            switch_state = 0        # Set switch state
-            print("0", end='')      # Print a 0
-        else:   
-            if switch_state == 0:   # If switch was open, and is now closed.
-                switch_state = 1    # Change switch state
-                counter += 1        # Increment counter
-                dispCount(counter)
-            print("1",end="")       # Print 1
+	switch_state = 0                # Track state of switch
+	counter = 0                     # Initialize counter
+	while True:                     # Loop until interrupted (Ctl-C)
+		if GPIO.input(pin)==0:      # If switch open
+			switch_state = 0        # Set switch state
+			print("0", end='')      # Print a 0
+		else:   
+			if switch_state == 0:   # If switch was open, and is now closed.
+				switch_state = 1    # Change switch state
+				counter += 1        # Increment counter
+				dispCount(counter)
+			print("1",end="")       # Print 1
             
 except KeyboardInterrupt:           # When Ctl-C ...break out of program
-    print("\n\nProgram ending.")
-    print("Switch pressed",counter,"times.")    # Print switch counter
+	print("\n\nProgram ending.")
+	print("Switch pressed",counter,"times.")    # Print switch counter
                   
 finally:
-    print("Cleaning up GPIO.")      
-    GPIO.cleanup()                  # Reset GPIO
+	print("Cleaning up GPIO.")      
+	GPIO.cleanup()                  # Reset GPIO
 # End of program
