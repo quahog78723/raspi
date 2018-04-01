@@ -1,6 +1,9 @@
-# Switch test
-import RPi.GPIO as GPIO
-import LED_class
+# Switch test 
+
+# Simple sxcript testing whether or not a switch is open or closed.
+
+import RPi.GPIO as GPIO     # Import RPI.GPIO module as GPIO
+import LED_class            # Import our LED_class file that includes the LED class
 
 BCM_PIN = 22    # Input pin for switch - PIN number used based on Broadcom numbering
 
@@ -12,12 +15,13 @@ BCM_LED1 = 19   # Output GPIO for LED1
 # Function to set LEDs based on value of count
 
 def dispCount(ct):
-    ct = ct % 16     # Set count mod 16
-    binrep = bin(int(ct))[2:].zfill(4)
+    ct = ct % 16                        # Set count mod 16
+    binrep = bin(int(ct))[2:].zfill(4)  # Strips 0b from string and pads with 0s...to create a 4 character string
+                                        # representing the binary value of the counter
 
-    print("\n\n",binrep)
+    print("\n\n",binrep)                # Print the string in the console
     
-    if binrep[0] == '1':
+    if binrep[0] == '1':                # Turn on the appropriate LEDs (where binrep contains 1 in designated position
         led8.set_on()
     else:
         led8.set_off()
@@ -37,17 +41,16 @@ def dispCount(ct):
     else:
         led1.set_off()
 
+# Beging main program        
+        
 GPIO.setmode(GPIO.BCM)      # Set mode to BCM numbering
-
-pin = BCM_PIN
-
-GPIO.setup(pin,GPIO.IN)             # Initialize pin for input
+pin = BCM_PIN               # set pin variable to the pin number to be used
+GPIO.setup(pin,GPIO.IN)     # Initialize pin for input
 
 led1 = LED_class.LED(BCM_LED1)      # Create LED objects (and initialize)
 led2 = LED_class.LED(BCM_LED2)
 led4 = LED_class.LED(BCM_LED4)
 led8 = LED_class.LED(BCM_LED8)    
-
 
 try:
     switch_state = 0                # Track state of switch
@@ -70,3 +73,4 @@ except KeyboardInterrupt:           # When Ctl-C ...break out of program
 finally:
     print("Cleaning up GPIO.")      
     GPIO.cleanup()                  # Reset GPIO
+# End of program
