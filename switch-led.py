@@ -1,62 +1,81 @@
-# Switch test 
-
-# Simple sxcript testing whether or not a switch is open or closed.
+# Simple script testing whether or not a switch is open or closed. It also counts the number of
+# times the switch is toggled and displays that count as a binary number using LEDs.
 
 import RPi.GPIO as GPIO     # Import RPI.GPIO module as GPIO
 import LED_class            # Import our LED_class file that includes the LED class
 
-BCM_PIN = 22    # Input pin for switch - PIN number used based on Broadcom numbering
+BCM_PORT    = 22    # Input port for switch - port number used based on Broadcom numbering
 
-BCM_LED8 = 5    # Output GPIO for LED8
-BCM_LED4 = 6    # Output GPIO for LED4
-BCM_LED2 = 13   # Output GPIO for LED2
-BCM_LED1 = 19   # Output GPIO for LED1
+BCM_LEDS    = [5,6,13,19]   # For LED to be used, list of ports used
+NUM_LEDS    = len(BCM_LEDS) # Number of EDs based on number of ports
+led_list    = []            # Initialize a list for the LEDs
 
+#-------------
 # Function to set LEDs based on value of count
+#-------------
 
 def dispCount(ct):
-	ct = ct % 16                        # Set count mod 16
-	binrep = bin(int(ct))[2:].zfill(4)  # Strips 0b from string and pads with 0s...to create a 4 character string
+	ct = ct % (2**NUM_LEDS)             # Set count mod max value able to be displayed
+	binrep = bin(int(ct))[2:].zfill(NUM_LEDS)  # Str# Simple script testing whether or not a switch is open or closed. It also counts the number of
+# times the switch is toggled and displays that count as a binary number using LEDs.
+
+import RPi.GPIO as GPIO     # Import RPI.GPIO module as GPIO
+import LED_class            # Import our LED_class file that includes the LED class
+
+BCM_PORT    = 22    # Input port for switch - port number used based on Broadcom numbering
+
+BCM_LEDS    = [5,6,13,19]   # For LED to be used, list of ports used
+NUM_LEDS    = len(BCM_LEDS) # Number of EDs based on number of ports
+led_list    = []            # Initialize a list for the LEDs
+
+#-------------
+# Function to set LEDs based on value of count
+#-------------
+
+def dispCount(ct):
+	ct = ct % (2**NUM_LEDS)             # Set count mod max value able to be displayed
+	binrep = bin(int(ct))[2:].zfill(NUM_LEDS)  # Strips 0b from string and pads with 0s...
                                         # representing the binary value of the counter
+	print("\n\n",binrep)            # Print the string in the console
 
-	print("\n\n",binrep)                # Print the string in the console
-    
-	if binrep[0] == '1':                # Turn on the appropriate LEDs (where binrep contains 1 in designated position
-		led8.set_on()
-	else:
-		led8.set_off()
-        
-	if binrep[1] == '1':    
-		led4.set_on()
-	else:
-		led4.set_off()
-
-	if binrep[2] == '1':
-		led2.set_on()
-	else:
-		led2.set_off()
-
-	if binrep[3] == '1':
-		led1.set_on()
-	else:
-		led1.set_off()
-
+	for i in range(len(binrep)):    # For LED in list
+		led_list[i].set(binrep[i] == '1') # Set on/off based on binary digit in count
+#-------------
 # Beging main program        
-        
-GPIO.setmode(GPIO.BCM)      # Set mode to BCM numbering
-pin = BCM_PIN               # set pin variable to the pin number to be used
-GPIO.setup(pin,GPIO.IN)     # Initialize pin for input
+#-------------
 
-led1 = LED_class.LED(BCM_LED1)      # Create LED objects (and initialize)
-led2 = LED_class.LED(BCM_LED2)
-led4 = LED_class.LED(BCM_LED4)
-led8 = LED_class.LED(BCM_LED8)    
+GPIO.setmode(GPIO.BCM)      # Set mode to BCM numbering
+GPIO.setup(BCM_PORT,GPIO.IN)     # Initialize pin for input
+
+for i in range(NUM_LEDS):   # For each port defined above,
+	led_list.append(LED_class.LED(BCM_LEDS[i])) # Create an LED object based on the port number
 
 try:
 	switch_state = 0                # Track state of switch
 	counter = 0                     # Initialize counter
 	while True:                     # Loop until interrupted (Ctl-C)
-		if GPIO.input(pin)==0:      # If switch open
+		if GPIO.input(BCM_PORT)==0:      # If switch open
+			switch_state = 0        # Set switch stateips 0b from string and pads with 0s...
+                                        # representing the binary value of the counter
+	print("\n\n",binrep)            # Print the string in the console
+
+	for i in range(len(binrep)):    # For LED in list
+		led_list[i].set(binrep[i] == '1') # Set on/off based on binary digit in count
+#-------------
+# Beging main program        
+#-------------
+
+GPIO.setmode(GPIO.BCM)      # Set mode to BCM numbering
+GPIO.setup(BCM_PORT,GPIO.IN)     # Initialize pin for input
+
+for i in range(NUM_LEDS):   # For each port defined above,
+	led_list.append(LED_class.LED(BCM_LEDS[i])) # Create an LED object based on the port number
+
+try:
+	switch_state = 0                # Track state of switch
+	counter = 0                     # Initialize counter
+	while True:                     # Loop until interrupted (Ctl-C)
+		if GPIO.input(BCM_PORT)==0:      # If switch open
 			switch_state = 0        # Set switch state
 			print("0", end='')      # Print a 0
 		else:   
