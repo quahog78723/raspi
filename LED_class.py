@@ -19,4 +19,7 @@ class LED:                              # Define LED class
 
 	def set_off(self):                      # set_off method - Sets pin low (Turns off LED)
 		GPIO.output(self.__pin__, False)
+		
+	def set(self,__pin__,on_off):		# Pass boolean vaue to indicate whether to turn on (True) or off (False)
+		GPIO.output(self.__pin__,on_off)
 # End of LED class
