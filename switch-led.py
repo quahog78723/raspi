@@ -40,27 +40,7 @@ def dispCount(ct):
 
 	for i in range(len(binrep)):    # For LED in list
 		led_list[i].set(binrep[i] == '1') # Set on/off based on binary digit in count
-#-------------
-# Beging main program        
-#-------------
 
-GPIO.setmode(GPIO.BCM)      # Set mode to BCM numbering
-GPIO.setup(BCM_PORT,GPIO.IN)     # Initialize pin for input
-
-for i in range(NUM_LEDS):   # For each port defined above,
-	led_list.append(LED_class.LED(BCM_LEDS[i])) # Create an LED object based on the port number
-
-try:
-	switch_state = 0                # Track state of switch
-	counter = 0                     # Initialize counter
-	while True:                     # Loop until interrupted (Ctl-C)
-		if GPIO.input(BCM_PORT)==0:      # If switch open
-			switch_state = 0        # Set switch stateips 0b from string and pads with 0s...
-                                        # representing the binary value of the counter
-	print("\n\n",binrep)            # Print the string in the console
-
-	for i in range(len(binrep)):    # For LED in list
-		led_list[i].set(binrep[i] == '1') # Set on/off based on binary digit in count
 #-------------
 # Beging main program        
 #-------------
