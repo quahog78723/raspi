@@ -1,39 +1,56 @@
 # The PIN class provides a simple way to interface with individual GPIO PINs and will maintain
 # various attributes associated with the PIN.
 
-import RPi.GPIO as GPIO					# Use RPi.GPIO module and reference as GPIO
+#import RPi.GPIO as GPIO					# Use RPi.GPIO module and reference as GPIO
 
 class PIN:								# Define PIN class	
-	UNDEFINED 	= 0
-	INPUT		= 1
-	OUTPUT		= 2
-	LOW			= 1
-	HIGH		= 2
+#	UNDEFINED 	= 0
+#	INPUT		= 1
+#	OUTPUT		= 2
+#	LOW		= 1
+#	HIGH		= 2
 	
 	
 	
 	def __init__(self,pin):         	# Instance constructor, takes a PIN ID as a parameter
-		self.__id 	= str(pin)
-		self.__mode = UNDEFINED
-		self.__status	=
-		self.__gui_obj = ""
+                self.UNDEFINED  = 0
+                self.INPUT      = 1
+                self.OUTPUT     = 2
+                self.LOW        = 1
+                self.HIGH       = 2
+                self.__id 	= str(pin)
+                self.__mode     = self.UNDEFINED
+                self.__status	= self.UNDEFINED
+                self.__gui_obj  = ""
 
 	def setup(self,mode):
 		self.__mode = mode
-		if state == INPUT:
-			#GPIO.setup(self.port,GPIO.IN)
-		elif state == OUTPUT:
-			#GPIO.setup(self.port,GPIO.OUT)
+		if mode == self.INPUT:
+                    pass
+		    #GPIO.setup(self.port,GPIO.IN)
+		elif mode == self.OUTPUT:
+                    pass
+		    #GPIO.setup(self.port,GPIO.OUT)
 	
 	def set(self,on_off):		# Pass boolean vaue to indicate whether to turn on (True) or off (False)
-		self.__status = on_ff	
+		self.__status = on_off	
 		#GPIO.output(self.port,on_off)
 
-	def __STR__(self):
-		print("PIN ID: ",self.__id)
-		print("State: ",self_state)
-		print("GUI Obj: ", self.__gui_obj)
-	
+	def __str__(self):
+#		print("PIN ID: ", self.__id)
+#		print("Mode: ", self.__mode)
+#		print("GUI Obj: ", self.__gui_obj)
+                return "PIN ID: " + str(self.__id) + "\nMode: " + str(self.__mode) +  "\nStatus: " + str(self.__status) +"\nGUI Obj: " + str(self.__gui_obj)
+
 	def get_port(self):
                 return (self.__id)
+
+	def get_mode(self):
+                return (self.__mode)
+
+	def get_status(self):
+                returrn (self.__status)
+
+	def get_gui_obj(self):
+                return (self.__gui_obj)
 # End of PIN class
