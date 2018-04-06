@@ -23,6 +23,7 @@ def setLEDs():                          # Function to be called whenever the use
 
 root = tkinter.Tk()                 # Initialize GUI
 root.title("LED Selector")          # Add title for window
+root.geometry("150x100+200+200")    # Set size and position of window
 
 v = tkinter.IntVar()                # define tinker integer varialbe that will hold ID of button clicked
 v.set(-1)                           # Initially no LED will be on... -1 indicates a non-existant LED identifier
