@@ -1,26 +1,50 @@
 # Test script for showing how a call back function can be called based on a GPIO pin event
 # Also, shows how to block execution until an event occurs.
 
-import RPi.GPIO as GPIO						# Import RPI.GPIO module
+import RPi.GPIO as GPIO					# Import RPI.GPIO module
 
-INPUT_PIN = 15								# Set a constant to the pin to be used in this test
+INPUT_PIN = 15						# Set a constant to the pin to be used in this test
 
-def gpio_callback(channel):					# Define function (this function name will be passed when setting up call back)
-											# On callback, the channel (pin # ) causing the call back will be passed as a param
-	print("Call back channel", channel)		# Simple print statement showing the channel/pin
+#
+# Define function gpio_callback
+#
+def gpio_callback(channel):				# Define function (this function name will be passed when setting up call back)
+							# On callback, the channel (pin # ) causing the call back will be passed as a param
+	print("\nIn gpio_callback function", channel)		# Simple print statement showing the channel/pin
+	
+#
+# Main line of program
+#
 
-GPIO.setmode(GPIO.BOARD)					# Set mode to use the BOARD numbering scheme 
-GPIO.setup(INPUT_PIN,GPIO.IN)				# Set the PIN as an inout pin
+GPIO.setmode(GPIO.BOARD)			# Set mode to use the BOARD numbering scheme
+GPIO.setup(INPUT_PIN,GPIO.IN)			# Set the PIN as an inout pin
 
-# Uncomment the following to test the call back capability
-# GPIO.add_event_detect(INPUT_PIN,GPIO.FALLING,callback=gpio_callback)
+print("Test program to demonstrate callbacks and waits")
 
-# The followingwas added as a test for the 'blocking' function of wait_for_edge. This call
-# will pause the mainline of the program until th event is detected and then the main line will continue.
+quit = False
+waiting_for_callback = True
 
-cont = True
-while cont:
-	print("Starting wait")                  
-	GPIO.wait_for_edge(INPUT_PIN,GPIO.BOTH)	# Call that blocks execution until an edge (falling or rising) is detected.
-	print("Post wait")
-       
+while not quit:
+	opt = input("Enter option to demonstrate callback (c) or block (b). Quit (q) exits program : ")
+	if opt == 'c':
+		GPIO.add_event_detect(INPUT_PIN,GPIO.FALLING,callback=gpio_callback,bouncetime=200) # Add detection that will call gpio_callback when the pin is in falling state
+		print("Main line will print '.' 500 times waiting for call back")
+		for i in range(500):
+			print('.',end='')
+		print("\nMain line complete")
+		GPIO.remove_event_detect(INPUT_PIN)
+	elif opt == 'b':             
+		print("Program is paused waiting for button push")
+		GPIO.wait_for_edge(INPUT_PIN,GPIO.BOTH)	# Call that blocks execution until an edge (falling or rising) is detected.
+		GPIO.remove_event_detect(INPUT_PIN)
+		print("Button has been pushed so program can contiue.")
+	elif opt == 'q':
+		quit = True
+
+	else:
+		print("Invalid input, try again.")
+
+
+
+
+
