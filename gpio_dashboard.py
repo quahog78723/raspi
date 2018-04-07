@@ -37,12 +37,14 @@ tk.Label(root,text = "OUT-HIGH", fg='blue',padx=COL_PAD,width=P_RB_COL_W).grid(r
 # for each pin (start numbering at 1)
 for i in range(2,NUM_PINS+2):
         pin = PIN.PIN(i)                # Create pin object
-        vRB = tk.IntVar()                 # Create pin specific var to hold value of rb clicked
-        vRB.set(pin.UNDEFINED)            # Set default value of RBs to value to UNDEFINED
-        pin.set_dir_var(vRB)                  # Set the initial mode of pin to UNDEFINED
-        vOH = tk.IntVar()
-        vOH.set(pin.LOW)
-        pin.set_OH_var(vOH)
+
+        vRB = tk.IntVar()               # Create pin specific var to hold value of rb clicked
+        vRB.set(pin.INPUT)              # Set default value of RBs to value to INPUT
+        pin.set_dir_var(vRB)            # Set the RB to INPUT
+
+        vOH = tk.IntVar()               # Create variable for output-high button
+        vOH.set(pin.LOW)                # Set default value to LOW
+        pin.set_OH_var(vOH)             # Set pin to LOW
 
         # Add lbl(pin name) and other controls for each button
         lbl = tk.Label(root,padx=COL_PAD,width=P_NM_COL_W,text = "PIN-"+str(i))
@@ -50,15 +52,17 @@ for i in range(2,NUM_PINS+2):
         but_output  = tk.Radiobutton(root,padx=COL_PAD,width=P_RB_COL_W,variable=vRB,value=pin.OUTPUT,command=pin.pin_selected)
         cbox_high   = tk.Checkbutton(root,padx=COL_PAD,width=P_RB_COL_W,variable=vOH,onvalue=1,offvalue=0,command=pin.out_high_selected)
 
+        # Position GUI elements
+
         lbl.grid(row=i-1,column=P_NM_COL)
         but_input.grid(row=i-1,column=DIR_I_COL)
         but_output.grid(row=i-1,column=DIR_O_COL)
         cbox_high.grid(row=i-1,column=OUT_HIGH_COL)
-        if pin.get_direction != pin.OUTPUT:
-                cbox_high.config(state=DISABLED)
-        pin.set_OH_cBox(cbox_high)
-#        print("Disable:",DISABLED,type(DISABLED),"NORMAL:",NORMAL)
-#       pins.append([lbl,pin])  # Is this needed/useful?
+
+        # More GUI initializtio stuff
+        if pin.get_direction != pin.OUTPUT:             # If direction is not output, 
+                cbox_high.config(state=DISABLED)        # disable checkbox
+        pin.set_OH_cBox(cbox_high)                      # Store linkto checkbox object in pin instance
         
 root.mainloop()
 
