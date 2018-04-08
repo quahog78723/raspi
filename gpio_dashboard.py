@@ -8,17 +8,53 @@ import MY_GPIO as MYGPIO
 # --------------
 
 NUM_PINS        = 26    # Number of pins to be shown in dashboard
-P_NM_COL_W      = 10    # Pin name column width
-P_RB_COL_W      = 6     # Radiobutton column width
-CB_COL_W        = 6     # Chkbox column width
-COL_PAD         = 5     # Column padding
+P_NM_COL_W      = 10     # Pin name column width
+P_RB_COL_W      = 4     # Radiobutton column width
+CB_COL_W        = 4     # Chkbox column width
+COL_PAD         = 2     # Column padding
 
 P_NM_COL        = 0     # Column number for pin name 
 DIR_I_COL       = 1     # Column number for input RB
 DIR_O_COL       = 2     # Column number for output RB
-OUT_HIGH_COL    = 3
+OUT_HIGH_COL    = 3     # Column number for output high/low
+PWM_COL         = 4     # Column for PWM chkkbox
+FREQ_COL        = 5     # Column for frequency spinner
+D_CYC_COL     = 6     # Column for frequency spinner
+
+I2C_COLOR='blue'
+SPI_COLOR='magenta'
+PCM_COLOR='green'
+UART_COLOR='yellow'
 
 DB_WINDOW_TITLE = "GPIO Dashboard"
+PIN_FUNC=[[2,'I2C'], \
+          [3,'I2C'], \
+          [4,''], \
+          [5,''], \
+          [6,''], \
+          [7,'SPI'], \
+          [8,'SPI'], \
+          [9,'SPI'], \
+          [10,'SPI'], \
+          [11,'SPI'], \
+          [12,''], \
+          [13,''], \
+          [14,'UART'], \
+          [15,'UART'], \
+          [16,''], \
+          [17,''], \
+          [18,'PCM'], \
+          [19,'PCM'], \
+          [20,'PCM'], \
+          [21,'PCM'], \
+          [22,''], \
+          [23,''], \
+          [24,''], \
+          [25,''], \
+          [26,''], \
+          [27,'']]
+
+
 # --------------
 # Function to build dashboard header
 #---------------
@@ -26,13 +62,13 @@ def create_DB_Header():
         root.title(DB_WINDOW_TITLE)
 
         # Add labels to header frame
-        tk.Label(root,text = "PIN Name", fg='blue',padx=COL_PAD,width=P_NM_COL_W).grid(row=0,column=P_NM_COL)
-        tk.Label(root,text = "INPUT",    fg='blue',padx=COL_PAD,width=P_RB_COL_W).grid(row=0,column=DIR_I_COL)
-        tk.Label(root,text = "OUTPUT",   fg='blue',padx=COL_PAD,width=P_RB_COL_W).grid(row=0,column=DIR_O_COL)
-        tk.Label(root,text = "OUT-HIGH", fg='blue',padx=COL_PAD,width=P_RB_COL_W).grid(row=0,column=OUT_HIGH_COL)
-
-        
-
+        tk.Label(root,text = "PIN ID", fg='blue',padx=COL_PAD,width=P_NM_COL_W).grid(row=0,column=P_NM_COL)
+        tk.Label(root,text = "IN",     fg='blue',padx=COL_PAD,width=P_RB_COL_W).grid(row=0,column=DIR_I_COL)
+        tk.Label(root,text = "OUT",    fg='blue',padx=COL_PAD,width=P_RB_COL_W).grid(row=0,column=DIR_O_COL)
+        tk.Label(root,text = "HIGH",   fg='blue',padx=COL_PAD,width=P_RB_COL_W).grid(row=0,column=OUT_HIGH_COL)
+        tk.Label(root,text = "PWM",    fg='blue',padx=COL_PAD,width=P_RB_COL_W).grid(row=0,column=PWM_COL)
+        tk.Label(root,text = "FREQ",   fg='blue',padx=COL_PAD,width=P_RB_COL_W).grid(row=0,column=FREQ_COL)
+        tk.Label(root,text = "D_CYC",  fg='blue',padx=COL_PAD,width=P_RB_COL_W).grid(row=0,column=D_CYC_COL)
 
 
 # --------------
@@ -46,36 +82,65 @@ root = tk.Tk()          # Initialize gui
 create_DB_Header()
 
 # for each pin (start numbering at 1)
-for i in range(2,NUM_PINS+2):
-        pin = PIN.PIN(i)                # Create pin object
+#for i in range(2,NUM_PINS+2):
+for x in PIN_FUNC:
+        pin_num=x[0]
+        pin = PIN.PIN(pin_num)                # Create pin object
 
-        vRB = tk.IntVar()               # Create pin specific var to hold value of rb clicked
-        vRB.set(pin.INPUT)              # Set default value of RBs to value to INPUT
-        pin.set_dir_var(vRB)            # Set the RB to INPUT
+        vRB_dir = tk.IntVar()     # Create pin specific var to hold value of rb clicked
+        vRB_dir.set(pin.INPUT)
+        pin.set_DIR_var(vRB_dir)            # Set the RB to INPUT
 
-        vOH = tk.IntVar()               # Create variable for output-high button
-        vOH.set(pin.LOW)                # Set default value to LOW
-        pin.set_OH_var(vOH)             # Set pin to LOW
+        vCB_out = tk.IntVar(pin.LOW)    # Create variable for output-high button
+        pin.set_OUT_var(vCB_out)             # Set pin to LOW
+
+        vCB_pwm = tk.IntVar(pin.PWM_OFF)              # Create variable for PWM chkbox
+        pin.set_PWM_var(vCB_pwm)           # Set pin to LOW
+
+        vSB_freq = tk.StringVar("")              
+        pin.set_FREQ_var(vSB_freq)           
+
+        vSB_dcyc = tk.StringVar("")              
+        pin.set_DCYC_var(vSB_dcyc)           
+
 
         # Add lbl(pin name) and other controls for each button
-        lbl = tk.Label(root,padx=COL_PAD,width=P_NM_COL_W,text = "PIN-"+str(i))
-        but_input   = tk.Radiobutton(root,padx=COL_PAD,width=P_RB_COL_W,variable=vRB,value=pin.INPUT,command=pin.pin_selected)
-        but_output  = tk.Radiobutton(root,padx=COL_PAD,width=P_RB_COL_W,variable=vRB,value=pin.OUTPUT,command=pin.pin_selected)
-        cbox_high   = tk.Checkbutton(root,padx=COL_PAD,width=P_RB_COL_W,variable=vOH,onvalue=1,offvalue=0,command=pin.out_high_selected)
+        pin_name    = tk.Label(root,padx=COL_PAD,width=P_NM_COL_W,text = "PIN-"+str(pin_num)+" "+x[1])
+        if x[1] == "PCM":
+                pin_name.config(bg=PCM_COLOR)
+        elif x[1] == "I2C":
+                pin_name.config(bg=I2C_COLOR,fg='white')
+        elif x[1] == "UART":
+                pin_name.config(bg=UART_COLOR)
+        elif x[1] == "SPI":
+                pin_name.config(bg=SPI_COLOR)
+        else:
+                pass
+        
+                
+        but_input   = tk.Radiobutton(root,padx=COL_PAD,width=P_RB_COL_W,variable=vRB_dir,value=pin.INPUT,command=pin.pin_selected)
+        but_output  = tk.Radiobutton(root,padx=COL_PAD,width=P_RB_COL_W,variable=vRB_dir,value=pin.OUTPUT,command=pin.pin_selected)
+        cbox_high   = tk.Checkbutton(root,padx=COL_PAD,width=P_RB_COL_W,variable=vCB_out,onvalue=1,offvalue=0,command=pin.out_high_selected)
+        cbox_pwm    = tk.Checkbutton(root,padx=COL_PAD,width=P_RB_COL_W,variable=vCB_pwm,onvalue=1,offvalue=0,command=pin.pwm_selected)
+        sbox_freq   = tk.Spinbox(root,width=P_RB_COL_W,from_=1,to=100,textvariable=vSB_freq,command=pin.freq_selected)
+        sbox_dcyc   = tk.Spinbox(root,width=P_RB_COL_W,from_=0,to=100,textvariable=vSB_dcyc,command=pin.dcyc_selected)
 
         # Position GUI elements
 
-        lbl.grid(row=i-1,column=P_NM_COL)
-        but_input.grid(row=i-1,column=DIR_I_COL)
-        but_output.grid(row=i-1,column=DIR_O_COL)
-        cbox_high.grid(row=i-1,column=OUT_HIGH_COL)
-
+        pin_name.grid(row=pin_num-1,column=P_NM_COL)
+        but_input.grid(row=pin_num-1,column=DIR_I_COL)
+        but_output.grid(row=pin_num-1,column=DIR_O_COL)
+        cbox_high.grid(row=pin_num-1,column=OUT_HIGH_COL)
+        cbox_pwm.grid(row=pin_num-1,column=PWM_COL)
+        sbox_freq.grid(row=pin_num-1,column=FREQ_COL)
+        sbox_dcyc.grid(row=pin_num-1,column=D_CYC_COL)
         # More GUI initializtio stuff
         if pin.get_direction != pin.OUTPUT:             # If direction is not output, 
                 cbox_high.config(state=DISABLED)        # disable checkbox
-        pin.set_OH_cBox(cbox_high)                      # Store linkto checkbox object in pin instance
-        pin.set_RB_inp(but_input)
-        pin.set_RB_out(but_output)
+        pin.set_OH_CBX(cbox_high)                      # Store linkto checkbox object in pin instance
+        pin.set_INP_RB(but_input)
+        pin.set_OUT_RB(but_output)
+        pin.set_PWM_CBX(cbox_pwm)
 root.mainloop()
 
 gpio.cleanup()

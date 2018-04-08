@@ -13,14 +13,29 @@ class PIN:                                                              # Define
                 self.OUTPUT = 0         # Output direction indicator
                 self.LOW = 0            # Pin low indicator
                 self.HIGH = 1           # Pin high indicator
-
+                self.PWM_ON = 1
+                self.PWM_OFF = 0
+                
                 self.__id = pin                 # Set ID to pin number
                 self.__direction = self.INPUT   # set default direction
-                self.__OH_var = self.LOW        # Initialize variable that will contain variable for output high status
                 self.__status = self.UNDEFINED  # Variable indicating high/low pin status
-                self.__OH_cBox = self.UNDEFINED # Variable will contain referenece to gui checkbox object 
+                
+                self.__DIR_var = self.INPUT
+                self.__OH_var = self.LOW        # Initialize variable that will contain variable for output high status
+                self.__PWM_var = self.PWM_OFF
+                self.__FREQ_var = 0
+                self.__DCYC_var = 0
+
                 self.__RB_inp = self.UNDEFINED
                 self.__RB_out = self.UNDEFINED
+                self.__OH_cBox = self.UNDEFINED # Variable will contain referenece to gui checkbox object 
+                self.__SB_freq = self.UNDEFINED
+                self.__SB_dcyc = self.UNDEFINED
+                
+                self.__p = 0
+
+                # Reset output
+                
                 self.set_direction(self.OUTPUT) # Initialize direction to output
                 self.set_output(False)          # Set output to False (low) - Needed because of 'sticky' behavior of RPi
                 self.set_direction(self.INPUT)  # Set direction to input
@@ -66,14 +81,30 @@ class PIN:                                                              # Define
         # --------------
         # Method to set tkinter variable associated with direction radio buttons
         # --------------
-        def set_dir_var(self,var):
-                self.__dir_var = var
+        def set_DIR_var(self,var):
+                self.__DIR_var = var
 
         # --------------
         # Method to set tkinter variable associated with output high chkbox
         # --------------
-        def set_OH_var(self,var):
+        def set_OUT_var(self,var):
                 self.__OH_var = var
+
+        # --------------
+        # Method to set tkinter variable associated with PWM high chkbox
+        # --------------
+        def set_PWM_var(self,var):
+                self.__PWM_var = var
+        # --------------
+        # Method to set tkinter variable associated with PWM high chkbox
+        # --------------
+        def set_FREQ_var(self,var):
+                self.__FREQ_var = var
+        # --------------
+        # Method to set tkinter variable associated with PWM high chkbox
+        # --------------
+        def set_DCYC_var(self,var):
+                self.__DCYC_var = var
 
         # --------------
         # Method to set output pin to high or low
@@ -94,20 +125,22 @@ class PIN:                                                              # Define
         # --------------
         # Method to store reference to GUI checkBox
         # --------------
-        def set_OH_cBox(self,cBox):
+        def set_OH_CBX(self,cBox):
                 self.__OH_cBox = cBox
 
-        def set_RB_inp(self,rb):
+        def set_INP_RB(self,rb):
                 self.__RB_inp = rb
 
-        def set_RB_out(self,rb):
+        def set_OUT_RB(self,rb):
                 self.__RB_out = rb
-                
+
+        def set_PWM_CBX(self,cBox):
+                self.__PWM_cBox = cBox                
         # --------------
         # Method called when a direction radio button is clicked
         # --------------
         def pin_selected(self):
-                selected_mode = self.__dir_var.get()
+                selected_mode = self.__DIR_var.get()
                 if selected_mode == self.get_direction():
                         print("Button already selected")
                 else:
@@ -129,12 +162,45 @@ class PIN:                                                              # Define
                 else:
                         print(" Pin: ",self.get_id(),"set LOW")
                 self.set_output(self.__OH_var.get())
+        # --------------
+        # Method called when the pwm chk box is clicked
+        # --------------
+        def pwm_selected(self):
+                if self.__PWM_var.get() == self.PWM_ON:
+                        print(" Pin: ",self.get_id(),"turn PWM on (not implement yet)")
+                        if self.get_direction() == self.OUTPUT:
+                                self.__p = GPIO.PWM(self.__id,2)
+                                self.__p.start(50)
+                else:
+                        print(" Pin: ",self.get_id(),"turn PWM off (not implement yet)")
+                        if self.__p != 0:
+                                self.__p.stop()
+                                self.__p = 0
+                                        
+                # !!!!!!!!!!!!!!!!!!!!!!
+                # Need logic to set PWM
+                # !!!!!!!!!!!!!!!!!!!!!!
 
+        # --------------
+        # Method called when the Freq SB is changed
+        # --------------
+        def freq_selected(self):
+                print(" Pin: " , self.get_id() , "frequency changed to ",self.__FREQ_var.get())
+
+
+        # --------------
+        # Method called when the Freq SB is changed
+        # --------------
+        def dcyc_selected(self):
+                print(" Pin: " , self.get_id(), "duty cycle changed to ",self.__DCYC_var.get())
+
+
+                
         # --------------
         # Call back for input pin
         # --------------
         def callback_pin_state_change(self,channel):
-                print("Pin ",self.get_id(),"has changed")
+                print(" Pin ",self.get_id(),"has changed")
                 if GPIO.input(self.__id)==self.HIGH:
                         self.__RB_inp.configure(fg='red')
                 else:
