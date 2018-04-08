@@ -19,6 +19,8 @@ class PIN:                                                              # Define
                 self.__OH_var = self.LOW        # Initialize variable that will contain variable for output high status
                 self.__status = self.UNDEFINED  # Variable indicating high/low pin status
                 self.__OH_cBox = self.UNDEFINED # Variable will contain referenece to gui checkbox object 
+                self.__RB_inp = self.UNDEFINED
+                self.__RB_out = self.UNDEFINED
                 self.set_direction(self.OUTPUT) # Initialize direction to output
                 self.set_output(False)          # Set output to False (low) - Needed because of 'sticky' behavior of RPi
                 self.set_direction(self.INPUT)  # Set direction to input
@@ -50,8 +52,11 @@ class PIN:                                                              # Define
                         GPIO.setup(self.__id,GPIO.IN) # Set pin for input
                         if self.__OH_cBox !=self.UNDEFINED: # If gui chkbox exists, disable chkbox
                                 self.__OH_cBox.config(state="disabled")
+                        if self.__id != 19:
+                                GPIO.add_event_detect(self.__id,GPIO.BOTH,callback=self.callback_pin_state_change,bouncetime=200)
                 elif dir == self.OUTPUT:        # if output
                         self.__direction = dir  # Set __direction variable
+                        #GPIO.remove_event_detect(self.__id)
                         GPIO.setup(self.__id,GPIO.OUT)  # Set pin for output
                         if self.__OH_cBox !=self.UNDEFINED:     # If gui chkbox exists, enable chkbox
                                 self.__OH_cBox.config(state="normal")
@@ -92,6 +97,12 @@ class PIN:                                                              # Define
         def set_OH_cBox(self,cBox):
                 self.__OH_cBox = cBox
 
+        def set_RB_inp(self,rb):
+                self.__RB_inp = rb
+
+        def set_RB_out(self,rb):
+                self.__RB_out = rb
+                
         # --------------
         # Method called when a direction radio button is clicked
         # --------------
@@ -119,4 +130,16 @@ class PIN:                                                              # Define
                         print(" Pin: ",self.get_id(),"set LOW")
                 self.set_output(self.__OH_var.get())
 
+        # --------------
+        # Call back for input pin
+        # --------------
+        def callback_pin_state_change(self,channel):
+                print("Pin ",self.get_id(),"has changed")
+                if GPIO.input(self.__id)==self.HIGH:
+                        self.__RB_inp.configure(fg='red')
+                else:
+                        self.__RB_inp.configure(fg='black')
+                        
+                
+ 
 # End of PIN class
