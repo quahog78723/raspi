@@ -4,7 +4,7 @@ import tkinter				# Import tkinter for GUI stuff
 import RPi.GPIO as GPIO			# Import RPi.GPIO as GPIO
 import LED_class			# Import our LED_class fiel that includes our LED class
 
-LED_PORT_LIST = [5,6,13,19]                # Ports for LED1, LED2,...
+LED_PORT_LIST = [5,6,13,26]                # Ports for LED1, LED2,...
 NUM_LEDS = len(LED_PORT_LIST)
 # --------------
 # Function to turn on/off LEDs when button clicked
