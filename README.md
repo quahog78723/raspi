@@ -17,6 +17,6 @@ led-selector.py		- Simple GUI for turning LEDs on/off
 
 switch-led.py		- GUI for selecting an LED to turn on
 
-test_led.py 		- Simple script for turing on/off a sinle LED
+test_led.py 		- Simple script for turning on/off a single LED
 
 pwm_test.py	    - A simple test of pwm capabilities (adjust cycle and frequency)
