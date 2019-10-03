@@ -30,7 +30,7 @@ while not quit:
 		GPIO.add_event_detect(INPUT_PIN,GPIO.FALLING,callback=gpio_callback,bouncetime=200) # Add detection that will call gpio_callback when the pin is in falling state
 		print("Main line will print '.' 500 times waiting for call back")
 		for i in range(500):
-			print('.',end='')
+			print('.',end = '')
 		print("\nMain line complete")
 		GPIO.remove_event_detect(INPUT_PIN)
 	elif opt == 'b':             

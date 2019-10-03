@@ -11,7 +11,7 @@ NUM_PINS        = 26    # Number of pins to be shown in dashboard
 P_NM_COL_W      = 10     # Pin name column width
 P_RB_COL_W      = 4     # Radiobutton column width
 CB_COL_W        = 4     # Chkbox column width
-COL_PAD         = 2     # Column padding
+COL_PAD         = 3     # Column padding
 
 P_NM_COL        = 0     # Column number for pin name 
 DIR_I_COL       = 1     # Column number for input RB
@@ -19,7 +19,9 @@ DIR_O_COL       = 2     # Column number for output RB
 OUT_HIGH_COL    = 3     # Column number for output high/low
 PWM_COL         = 4     # Column for PWM chkkbox
 FREQ_COL        = 5     # Column for frequency spinner
-D_CYC_COL     = 6     # Column for frequency spinner
+D_CYC_COL       = 6     # Column for frequency spinner
+EDGE_COL        = 7
+BOUNCE_COL      = 8
 
 I2C_COLOR='blue'
 SPI_COLOR='magenta'
@@ -69,6 +71,8 @@ def create_DB_Header():
         tk.Label(root,text = "PWM",    fg='blue',padx=COL_PAD,width=P_RB_COL_W).grid(row=0,column=PWM_COL)
         tk.Label(root,text = "FREQ",   fg='blue',padx=COL_PAD,width=P_RB_COL_W).grid(row=0,column=FREQ_COL)
         tk.Label(root,text = "D_CYC",  fg='blue',padx=COL_PAD,width=P_RB_COL_W).grid(row=0,column=D_CYC_COL)
+        tk.Label(root,text = "EDGE",   fg='blue',padx=COL_PAD,width=10).grid(row=0,column=EDGE_COL)
+        tk.Label(root,text = "BOUNCE", fg='blue',padx=COL_PAD,width=10).grid(row=0,column=BOUNCE_COL)
 
 
 # --------------
@@ -117,23 +121,28 @@ for x in PIN_FUNC:
         else:
                 pass
         
-                
-        but_input   = tk.Radiobutton(root,padx=COL_PAD,width=P_RB_COL_W,variable=vRB_dir,value=pin.INPUT,command=pin.pin_selected)
-        but_output  = tk.Radiobutton(root,padx=COL_PAD,width=P_RB_COL_W,variable=vRB_dir,value=pin.OUTPUT,command=pin.pin_selected)
+        myframe = tk.Frame(root,relief=GROOVE,borderwidth=1,bg='black')
+        myframe.grid(row=pin_num-1,column=DIR_I_COL,columnspan=2)
+        but_input   = tk.Radiobutton(myframe,padx=COL_PAD,width=P_RB_COL_W,variable=vRB_dir,value=pin.INPUT,command=pin.pin_selected)
+        but_output  = tk.Radiobutton(myframe,padx=COL_PAD,width=P_RB_COL_W,variable=vRB_dir,value=pin.OUTPUT,command=pin.pin_selected)
         cbox_high   = tk.Checkbutton(root,padx=COL_PAD,width=P_RB_COL_W,variable=vCB_out,onvalue=1,offvalue=0,command=pin.out_high_selected)
         cbox_pwm    = tk.Checkbutton(root,padx=COL_PAD,width=P_RB_COL_W,variable=vCB_pwm,onvalue=1,offvalue=0,command=pin.pwm_selected)
-        sbox_freq   = tk.Spinbox(root,width=P_RB_COL_W,from_=1,to=100,textvariable=vSB_freq,command=pin.freq_selected)
-        sbox_dcyc   = tk.Spinbox(root,width=P_RB_COL_W,from_=0,to=100,textvariable=vSB_dcyc,command=pin.dcyc_selected)
+        sbox_freq   = tk.Spinbox(root,bd=3,width=P_RB_COL_W,from_=1,to=100,textvariable=vSB_freq,command=pin.freq_selected)
+        sbox_dcyc   = tk.Spinbox(root,bd=3,width=P_RB_COL_W,from_=0,to=100,textvariable=vSB_dcyc,command=pin.dcyc_selected)
+        vLB_edge = tk.StringVar("")
+        oMenu_edge   = tk.OptionMenu(root,vLB_edge,"RISING","FALLING","BOTH")
+        oMenu_edge.config(width=9)
 
         # Position GUI elements
 
         pin_name.grid(row=pin_num-1,column=P_NM_COL)
-        but_input.grid(row=pin_num-1,column=DIR_I_COL)
-        but_output.grid(row=pin_num-1,column=DIR_O_COL)
+        but_input.grid(row=pin_num-1,column=0)
+        but_output.grid(row=pin_num-1,column=1)
         cbox_high.grid(row=pin_num-1,column=OUT_HIGH_COL)
         cbox_pwm.grid(row=pin_num-1,column=PWM_COL)
         sbox_freq.grid(row=pin_num-1,column=FREQ_COL)
         sbox_dcyc.grid(row=pin_num-1,column=D_CYC_COL)
+        oMenu_edge.grid(row=pin_num-1,column=EDGE_COL)
         # More GUI initializtio stuff
         if pin.get_direction != pin.OUTPUT:             # If direction is not output, 
                 cbox_high.config(state=DISABLED)        # disable checkbox
