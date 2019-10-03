@@ -6,10 +6,6 @@ import LED_class            # Import our LED_class file that includes the LED cl
 
 BCM_PORT    = 22    # Input port for switch - port number used based on Broadcom numbering
 
-BCM_LEDS    = [5,6,13,19]   # For LED to be used, list of ports used
-NUM_LEDS    = len(BCM_LEDS) # Number of EDs based on number of ports
-led_list    = []            # Initialize a list for the LEDs
-
 #-------------
 # Function to set LEDs based on value of count
 #-------------
@@ -24,7 +20,7 @@ import LED_class            # Import our LED_class file that includes the LED cl
 
 BCM_PORT    = 22    # Input port for switch - port number used based on Broadcom numbering
 
-BCM_LEDS    = [5,6,13,19]   # For LED to be used, list of ports used
+BCM_LEDS    = [5,6,13,26]   # For LED to be used, list of ports used
 NUM_LEDS    = len(BCM_LEDS) # Number of EDs based on number of ports
 led_list    = []            # Initialize a list for the LEDs
 
