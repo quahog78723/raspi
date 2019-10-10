@@ -3,8 +3,8 @@
 # The constructor method takes a pin number as a parameter, identifying the pin that the 
 # LED is associated with.
 # There is also a generic set method where
-# the paramter can be true or False for turning the LED on or off.
-# get_pin method returns the pin associated wit the LED.
+# the parameter can be True or False for turning the LED on or off.
+# get_pin method returns the pin associated with the LED.
 
 # Planned enhancements: 
 # 		- Add PWM capabilities and appropriate methods

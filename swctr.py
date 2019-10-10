@@ -1,23 +1,28 @@
-# Switch test
+# Switch counter
 # Bart Jacob
+#
+# This program counts the number of times a switch is pressed and
+# displays the count(mod 16) via 4 LEDS.
+
 
 import RPi.GPIO as GPIO
+import time
 
 BRD_PIN = 15    # PIN number used based on board numbering
-BCM_PIN = 4    # PIN number used based on Broadcom numbering
+BCM_PIN = 4     # PIN number used based on Broadcom numbering
 
-BCM_LED8 = 26
+BCM_LED8 = 26   # BCM pin numbers used for LEDs
 BCM_LED4 = 13
 BCM_LED2 = 6
 BCM_LED1 = 5
 
 def LEDsetup():
     GPIO.setmode(GPIO.BCM)
-    GPIO.setup(BCM_LED8,GPIO.OUT)
+    GPIO.setup(BCM_LED8,GPIO.OUT)   # Init pins for output
     GPIO.setup(BCM_LED4,GPIO.OUT)
     GPIO.setup(BCM_LED2,GPIO.OUT)
     GPIO.setup(BCM_LED1,GPIO.OUT)
-    GPIO.output(BCM_LED8,False)
+    GPIO.output(BCM_LED8,False)     # Set LEDs off
     GPIO.output(BCM_LED4,False)
     GPIO.output(BCM_LED2,False)
     GPIO.output(BCM_LED1,False)
@@ -70,16 +75,27 @@ LEDsetup()
 try:
     switch_state = 0                # Track state of switch
     counter = 0                     # Initialize counter
+    print("Open", end='')
+    loopCtr = 0
     while True:                     # Loop until interrupted (Ctl-C)
+        loopCtr += 1
+        loopCtr = loopCtr % 10000
+        if loopCtr == 0:
+            print('.',end='')
         if GPIO.input(pin)==0:      # If switch open
-            switch_state = 0        # Set switch state
-            print("0", end='')      # Print a 0
+            if switch_state == 1:   
+                switch_state = 0    # Set switch state
+                print("\nOpen",end='')       # Print state
+                time.sleep(.1)
+           # print("0", end='')      # Print a 0
         else:   
             if switch_state == 0:   # If switch was open, and is now closed.
                 switch_state = 1    # Change switch state
                 counter += 1        # Increment counter
                 dispCount(counter)
-            print("1",end="")       # Print 1
+                print("\nClosed",end='')     # Print state
+                time.sleep(.1)
+           # print("1",end="")       # Print 1
             
 except KeyboardInterrupt:           # When Ctl-C ...break out of program
     print("\n\nProgram ending.")
