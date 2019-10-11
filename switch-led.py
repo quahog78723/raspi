@@ -12,8 +12,7 @@ BCM_PORT    = 22    # Input port for switch - port number used based on Broadcom
 
 def dispCount(ct):
 	ct = ct % (2**NUM_LEDS)             # Set count mod max value able to be displayed
-	binrep = bin(int(ct))[2:].zfill(NUM_LEDS)  # Str# Simple script testing whether or not a switch is open or closed. It also counts the number of
-# times the switch is toggled and displays that count as a binary number using LEDs.
+	binrep = bin(int(ct))[2:].zfill(NUM_LEDS) 
 
 import RPi.GPIO as GPIO     # Import RPI.GPIO module as GPIO
 import LED_class            # Import our LED_class file that includes the LED class
