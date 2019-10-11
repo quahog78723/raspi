@@ -9,7 +9,9 @@ README.md			- This file
 
 LED_class.py		- A simple LED class definition
 
-PIN_class.py    - A simple class to represent and manipulate inidividual GPIO pins
+PIN_class.py    - A simple class to represent and manipulate inidividual GPIO pins. Currently includes GUI-related methods.
+
+MY_GPIO_class.py  - A simple class definition for GPIO.
 
 callback_test.py	- Test file for testing call back and blocking wait_for_event calls
 
