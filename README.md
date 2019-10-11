@@ -23,4 +23,3 @@ test_led.py 		- Simple script for turing on/off a sinle LED
 
 pwm_test.py	    - A simple test of pwm capabilities (adjust cycle and frequency)
 
-Test text for pull request
