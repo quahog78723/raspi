@@ -1,4 +1,4 @@
-# Switch test program - st0.oy
+# Switch test program - switch-example.py
 # Bart Jacob
 #
 # Program to sense the state of a pushbutton switch
