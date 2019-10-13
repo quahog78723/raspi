@@ -1,0 +1,10 @@
+Things to do and to explore
+
+Document initial setup of Raspberry Pi and the wifi enablement
+Download sample programs and put in Github
+Investigate use of eclipse and anaconda on Raspberry Pi
+Add switch to battery pack
+Look for maze solving algorithms
+Remote access via vnc from outside the house
+Create template pythin files
+Develop directory structure on Pi, Github and IDE
