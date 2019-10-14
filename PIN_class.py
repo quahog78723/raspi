@@ -42,8 +42,6 @@ class PIN:                                                              # Define
                 self.__EDGE_var = 0
                 self.__BOUNCE_var = 0
 
-                
-
                 # Reset output
                 
                 self.set_direction(self.OUTPUT_TXT) #self.OUTPUT) # Initialize direction to output
@@ -87,7 +85,7 @@ class PIN:                                                              # Define
         # Method to add event detection for a pin
         # --------------
         def set_eventDet(self, edge):
-                if self.__id != 19:  # pin 19 seems to constantly switch state
+                if (self.__id != 19) and (self.__id != 21) :  # pin 19 and 21 seem to constantly switch state
                         GPIO.add_event_detect(self.__id,GPIO.BOTH,callback=self.callback_pin_state_change,bouncetime=200)
                         self.__event_det = 1
         # --------------
@@ -95,14 +93,14 @@ class PIN:                                                              # Define
         # --------------
         def set_direction(self,dir):
                 print("In set_direction")
-                if dir == self.INPUT_TXT: #self.INPUT:           # If input
-                        self.__direction = dir #dir  # Set __direction variable
-                        GPIO.setup(self.__id,GPIO.IN) # Set pin for input
-                        if self.__OH_cBox !=self.UNDEFINED: # If gui chkbox exists, disable chkbox
+                if dir == self.INPUT_TXT: #self.INPUT:          # If input
+                        self.__direction = dir                  # Set __direction variable
+                        GPIO.setup(self.__id,GPIO.IN)           # Set pin for input
+                        if self.__OH_cBox != self.UNDEFINED:    # If gui chkbox exists, disable chkbox
                                 self.__OH_cBox.config(state="disabled")
                         self.set_eventDet(GPIO.BOTH)
-                elif dir == self.OUTPUT_TXT: #self.OUTPUT:        # if output
-                        self.__direction = dir #dir  # Set __direction variable
+                elif dir == self.OUTPUT_TXT: #self.OUTPUT:      # if output
+                        self.__direction = dir #dir             # Set __direction variable
                         try:
                                 if self.__event_det == 1:
                                         self.__event_det = 0
@@ -110,9 +108,9 @@ class PIN:                                                              # Define
                         except Exception as err:
                                 print("***",end=" ")
                                 print(err)
-                        GPIO.setup(self.__id,GPIO.OUT)  # Set pin for output
-                        if self.__OH_cBox !=self.UNDEFINED:     # If gui chkbox exists, enable chkbox
-                                self.__OH_cBox.config(state="normal")
+                        GPIO.setup(self.__id,GPIO.OUT)          # Set pin for output
+                        if self.__OH_cBox !=self.UNDEFINED:     # If gui chkbox exists... 
+                                self.__OH_cBox.config(state="normal") #  enable chkbox
                 else:
                         print("Error ...shold not get here.")
 
@@ -144,7 +142,7 @@ class PIN:                                                              # Define
         def get_PWM_var(self):
                 return self.__PWM_var
         # --------------
-        # Method to set tkinter variable associated with PWM high chkbox
+        # Method to set tkinter variable associated with Frequency spinbox
         # --------------
         def set_FREQ_var(self,var):
                 self.__FREQ_var = var
@@ -153,7 +151,7 @@ class PIN:                                                              # Define
                 return self.__FREQ_var
                 
         # --------------
-        # Method to set tkinter variable associated with PWM high chkbox
+        # Method to set tkinter variable associated with DutyCycle spinbox
         # --------------
         def set_DCYC_var(self,var):
                 self.__DCYC_var = var
@@ -229,31 +227,29 @@ class PIN:                                                              # Define
                         print("Button already selected")
                 else:
                         self.set_direction(selected_mode)
-
                         
         # --------------
         # Method called when the set high chkbox is clicked
         # --------------
         def out_high_selected(self):
                 if self.__OH_var.get() == self.HIGH:
-                        print(" Pin: ",self.get_id(),"set HIGH")
+                        print(" Pin: ",self.get_id()," set HIGH")
                 else:
-                        print(" Pin: ",self.get_id(),"set LOW")
+                        print(" Pin: ",self.get_id()," set LOW")
                 self.set_output(self.__OH_var.get())
+                
         # --------------
         # Method called when the pwm chk box is clicked
         # --------------
         def pwm_selected(self):
                 if self.__PWM_var.get() == self.PWM_ON:
-                        print(" Pin: ",self.get_id(),"turn PWM on (not implement yet)")
+                        print(" Pin: ",self.get_id()," turn PWM on (not implement yet)")
                         self.__SB_freq.config(state='normal')
                         self.__SB_dcyc.config(state='normal')
                                
                         if self.get_direction() == self.OUTPUT_TXT:
                                 self.__pwm = GPIO.PWM(self.__id,50)
-                                self.__pwm.start(50)
-                                
-                                
+                                self.__pwm.start(50)                            
                 else:
                         print(" Pin: ",self.get_id(),"turn PWM off (not implement yet)")
                         self.__SB_freq.config(state='disable')
@@ -273,26 +269,23 @@ class PIN:                                                              # Define
         def freq_selected(self):
                 print(" Pin: " , self.get_id() , "frequency changed to ",self.__FREQ_var.get())
 
-
         # --------------
-        # Method called when the Freq SB is changed
+        # Method called when the DCYC SB is changed
         # --------------
         def dcyc_selected(self):
                 print(" Pin: " , self.get_id(), "duty cycle changed to ",self.__DCYC_var.get())
 
         # --------------
-        # Method called when the Freq SB is changed
+        # Method called when Bounce widget is changed
         # --------------
         def bounce_selected(self,val):
                 print(" Pin: " , self.get_id(), "bounce ",val)
 
-
-                
         # --------------
         # Call back for input pin
         # --------------
         def callback_pin_state_change(self,channel):
-                print(" Pin ",self.get_id(),"has changed")
+                print(" Pin ",self.get_id()," has changed")
                 if GPIO.input(self.__id)==self.HIGH:
                         print("Pin",self.__id," is HIGH")
                         

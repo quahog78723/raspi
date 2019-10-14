@@ -1,28 +1,32 @@
-# Test script for showing how a call back function can be called based on a GPIO pin event
+# Test script for showing how a call back function can be called
+# based on a GPIO pin event.
 # Also, shows how to block execution until an event occurs.
 
-import RPi.GPIO as GPIO					# Import RPI.GPIO module
+# Bart Jacob
 
-INPUT_PIN = 15						# Set a constant to the pin to be used in this test
+
+import RPi.GPIO as GPIO		# Import RPI.GPIO module
+
+INPUT_PIN = 15			# Set a constant to the pin to be used in this test
 
 #
 # Define function gpio_callback
 #
-def gpio_callback(channel):				# Define function (this function name will be passed when setting up call back)
-							# On callback, the channel (pin # ) causing the call back will be passed as a param
-	print("\nIn gpio_callback function", channel)		# Simple print statement showing the channel/pin
+def gpio_callback(channel):	# Define function (this function name will be passed when setting up call back)
+				# On callback, the channel (pin # ) causing the call back will be passed as a param
+        print("\nIn gpio_callback function", channel)	# Simple print statement showing the channel/pin
 	
 #
 # Main line of program
 #
 
-GPIO.setmode(GPIO.BOARD)			# Set mode to use the BOARD numbering scheme
-GPIO.setup(INPUT_PIN,GPIO.IN)			# Set the PIN as an inout pin
+GPIO.setmode(GPIO.BOARD)	# Set mode to use the BOARD numbering scheme
+GPIO.setup(INPUT_PIN,GPIO.IN)	# Set the PIN as an in pin
 
 print("Test program to demonstrate callbacks and waits")
 
-quit = False
-waiting_for_callback = True
+quit                    = False
+waiting_for_callback    = True
 
 while not quit:
 	opt = input("Enter option to demonstrate callback (c) or block (b). Quit (q) exits program : ")
@@ -40,11 +44,6 @@ while not quit:
 		print("Button has been pushed so program can contiue.")
 	elif opt == 'q':
 		quit = True
-
+		GPIO.cleanup()
 	else:
 		print("Invalid input, try again.")
-
-
-
-
-

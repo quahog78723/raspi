@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import *
 import PIN_class as PIN
-import MY_GPIO as MYGPIO
+import MY_GPIO_class as MYGPIO
 
 # --------------
 # Constant definitions
