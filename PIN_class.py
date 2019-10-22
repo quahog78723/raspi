@@ -55,7 +55,6 @@ class PIN:              # Define PIN class
                 
                 self.set_direction(PIN.OUTPUT_TXT)      # Initialize direction to output
                 self.set_output(False)                  # Set output to False (low) - Needed because of 'sticky' behavior of RPi
-#                self.set_direction(PIN.INPUT_TXT)       # Set direction to input
 
                 if not PIN.NO_GPIO:
                         GPIO.setwarnings(False)
@@ -66,7 +65,7 @@ class PIN:              # Define PIN class
         def get_id(self):               # PIN id
                 return self.__id
 
-        def get_direction(self):        # PIN dirrection
+        def get_direction(self):        # PIN direction
                 return self.__direction
 
         def get_status(self):           # Output high/low
@@ -79,7 +78,7 @@ class PIN:              # Define PIN class
                 return self.__event_det
 
         # --------------
-        # Methods to set/get tkinter variable associated with direction option menu
+        # Methods to set/get tkinter variable associated with various widgets
         # --------------
         def set_DIR_var(self,var):
                 self.__DIR_var = var
@@ -87,54 +86,36 @@ class PIN:              # Define PIN class
         def get_DIR_var(self):
                 return self.__DIR_var
 
-        # --------------
-        # Methods to set/get tkinter variable associated with output high chkbox
-        # --------------
         def set_OUT_var(self,var):
                 self.__OH_var = var
 
         def get_OUT_var(self):
                 return self.__OH_var
-        
-        # --------------
-        # Methods to set/get tkinter variable associated with PWM high chkbox
-        # --------------
+
         def set_PWM_var(self,var):
                 self.__PWM_var = var
 
         def get_PWM_var(self):
                 return self.__PWM_var
         
-        # --------------
-        # Methods to set/get tkinter variable associated with Frequency spinbox
-        # --------------
         def set_FREQ_var(self,var):
                 self.__FREQ_var = var
 
         def get_FREQ_var(self):
                 return self.__FREQ_var
                 
-        # --------------
-        # Methods to set/get tkinter variable associated with DutyCycle spinbox
-        # --------------
         def set_DCYC_var(self,var):
                 self.__DCYC_var = var
 
         def get_DCYC_var(self):
                 return self.__DCYC_var
 
-        # --------------
-        # Methods to set/get tkinter variable associated with edge widget
-        # --------------
         def set_EDGE_var(self,var):
                 self.__EDGE_var = var
 
         def get_EDGE_var(self):
                 return self.__EDGE_var      
 
-        # --------------
-        # Methods to set/get tkinter variable associated with bounce widget
-        # --------------
         def set_BOUNCE_var(self,var):
                 self.__BOUNCE_var = var
 
@@ -144,6 +125,7 @@ class PIN:              # Define PIN class
         # --------------
         # Methods to set/get references to GUI widgets
         # --------------
+
         def set_OM_DIR(self,widget):
                 self.__OM_dir = widget
 
@@ -188,7 +170,15 @@ class PIN:              # Define PIN class
         
         # --------------
         # Method to set direction (input or output) of pin
-        # --------------
+        # --------------        
+
+#       Set instance variable
+#       Set/changeGUI and related GUI objects
+#       Set GPIO (and related options)
+#
+
+
+        
         def set_direction(self, dir):
                 if dir == PIN.INPUT_TXT:                        # If input
                         self.__direction = dir                  # Set __direction variable

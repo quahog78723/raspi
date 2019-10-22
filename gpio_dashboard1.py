@@ -183,7 +183,7 @@ for p in PIN_LIST:
         sbox_dcyc.config(state='disabled')
 
 # Add columns for edge and bouce
-        oMenu_edge      = tk.OptionMenu(root,pin.get_EDGE_var(),"RISING","FALLING","BOTH")
+        oMenu_edge      = tk.OptionMenu(root,pin.get_EDGE_var(),*EDGE_OPTS)
         oMenu_edge.config(width=9)
 
     #    oMenu_bounce   = tk.OptionMenu(root,vBounce,"0","100","200")
