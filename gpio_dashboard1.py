@@ -16,13 +16,13 @@ CB_COL_W        = 4     # Chkbox column width
 COL_PAD         = 3     # Column padding
 
 P_NM_COL        = 0     # Column number for pin name 
-DIR_IO_COL      = 2     # Column number for input RB
+DIR_IO_COL      = 2     # Column number for input menu
 OUT_HIGH_COL    = 3     # Column number for output high/low
 PWM_COL         = 4     # Column for PWM chkkbox
 FREQ_COL        = 5     # Column for frequency spinner
 D_CYC_COL       = 6     # Column for frequency spinner
-EDGE_COL        = 8
-BOUNCE_COL      = 9
+EDGE_COL        = 8     # Column for edge menu
+BOUNCE_COL      = 9     # Column number for bounce slider
 
 DIR_MENU_OPTS   = ["IN","OUT"]
 EDGE_OPTS       = ["NONE","FALLING","RISING","BOTH"]
@@ -197,9 +197,9 @@ for p in PIN_LIST:
         pin_name.grid(row=pin_num-1,column=P_NM_COL)
         oMenu_dir.grid(row=pin_num-1,column=DIR_IO_COL)
         cbox_high.grid(row=pin_num-1,column=OUT_HIGH_COL)
-        cbox_pwm.grid(row=pin_num-1,column=0) #PWM_COL)
-        sbox_freq.grid(row=pin_num-1,column=1) #FREQ_COL)
-        sbox_dcyc.grid(row=pin_num-1,column=2) #D_CYC_COL)
+        cbox_pwm.grid(row=pin_num-1,column=0)   # Column within PWM frame?
+        sbox_freq.grid(row=pin_num-1,column=1)  # Column within PWM frame?
+        sbox_dcyc.grid(row=pin_num-1,column=2)  # Column within PWM frame?
         oMenu_edge.grid(row=pin_num-1,column=EDGE_COL)
         
      #   oMenu_bounce.grid(row=pin_num-1,column=BOUNCE_COL)
