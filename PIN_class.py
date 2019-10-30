@@ -1,19 +1,21 @@
 # The PIN class provides a simple way to interface with individual GPIO PINs and will maintain
 # various attributes associated with the PIN.
 
-import RPi.GPIO as GPIO                                        # Use RPi.GPIO module and reference as GPIO
+#import RPi.GPIO as GPIO                                        # Use RPi.GPIO module and reference as GPIO
 
 class PIN:              # Define PIN class
         # --------------
         # class variables (constants)
         # --------------
-        NO_GPIO = False         # Used for debugging GUI without calling GPIO
+        NO_GPIO = True         # Used for debugging GUI without calling GPIO
 
         UNDEFINED       = -1    # Used for direction or high/low status
+        PWM             = 2     # Putput with PWM enabled
         INPUT           = 1     # Input direction indicator
         OUTPUT          = 0     # Output direction indicator
         INPUT_TXT       = "IN"
         OUTPUT_TXT      = "OUT"
+        PWM_TXT         = "PWM"
         LOW             = 0     # Pin low indicator
         HIGH            = 1     # Pin high indicator
         PWM_ON          = 1
@@ -28,39 +30,39 @@ class PIN:              # Define PIN class
 
             # Instance variables
               
-            self.__id       = pin           # Set ID to pin number
-            self.__direction = PIN.OUTPUT_TXT # Variable indicating current direction
-            self.__status   = PIN.LOW       # Variable indicating high/low pin status       
-            self.__pwm      = PIN.PWM_OFF   # Variable to point to pwm object if initialized
-            self.__freq     = 0
-            self.__dcyc     = 0
-            self.__event_det = PIN.ED_OFF    # Indicates if event detection is on or off for this pin
-            self.__bounce   = 0
+            self.__id           = pin           # Set ID to pin number
+            self.__direction    = PIN.OUTPUT_TXT # Variable indicating current direction
+            self.__status       = PIN.LOW       # Variable indicating high/low pin status       
+            self.__pwm          = PIN.PWM_OFF   # Variable to point to pwm object if initialized
+            self.__freq         = 0
+            self.__dcyc         = 0
+            self.__event_det    = PIN.ED_OFF    # Indicates if event detection is on or off for this pin
+            self.__bounce       = 0
             
             # Variables used to access GUI controls
                 
-            self.__OM_dir   = PIN.UNDEFINED
-            self.__CB_outH  = PIN.UNDEFINED
-            self.__CB_pwm   = PIN.UNDEFINED
-            self.__SB_freq  = PIN.UNDEFINED
-            self.__SB_dcyc  = PIN.UNDEFINED
-            self.__OM_edge  = PIN.UNDEFINED
-            self.__SL_bounce = PIN.UNDEFINED
+            self.__OM_dir       = PIN.UNDEFINED
+            self.__CB_outH      = PIN.UNDEFINED
+            self.__CB_pwm       = PIN.UNDEFINED
+            self.__SB_freq      = PIN.UNDEFINED
+            self.__SB_dcyc      = PIN.UNDEFINED
+            self.__OM_edge      = PIN.UNDEFINED
+            self.__SL_bounce    = PIN.UNDEFINED
 
             # Variables used by GUI controls to pass new value of changed widget
                 
-            self.__DIR_var  = PIN.UNDEFINED
-            self.__OH_var   = PIN.UNDEFINED        
-            self.__PWM_var  = PIN.UNDEFINED
-            self.__FREQ_var = PIN.UNDEFINED             
-            self.__DCYC_var = PIN.UNDEFINED             
-            self.__EDGE_var = PIN.UNDEFINED             
-            self.__BOUNCE_var = PIN.UNDEFINED           
+            self.__DIR_var      = PIN.UNDEFINED
+            self.__OH_var       = PIN.UNDEFINED        
+            self.__PWM_var      = PIN.UNDEFINED
+            self.__FREQ_var     = PIN.UNDEFINED             
+            self.__DCYC_var     = PIN.UNDEFINED             
+            self.__EDGE_var     = PIN.UNDEFINED             
+            self.__BOUNCE_var   = PIN.UNDEFINED           
 
             # Reset output
                 
-            self.set_direction(PIN.OUTPUT_TXT)      # Initialize direction to output
-            self.set_output(False)                  # Set output to False (low) - Needed because of 'sticky' behavior of RPi
+            self.set_direction(PIN.INPUT_TXT)   # Initialize direction to input
+            self.set_output(False)              # Set output to False (low) - Needed because of 'sticky' behavior of RPi
 
             if not PIN.NO_GPIO:
                 GPIO.setwarnings(False)
@@ -235,6 +237,10 @@ class PIN:              # Define PIN class
                         self.__CB_outH.select()
                     else:
                         self.__CB_outH.deselect()
+            elif dir == PIN.PWM_TXT:                 # if output
+                print("Enabling PWM widgets")
+                self.__SB_freq.config(state='normal')
+                self.__SB_dcyc.config(state='normal')
             else:
                 print("Error ...shold not get here.")
 

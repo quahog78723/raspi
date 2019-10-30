@@ -9,6 +9,10 @@
 import RPi.GPIO as GPIO
 
 class myGPIO:
+    IN  = GPIO.IN
+    OUT = GPIO.OUT
+    
+    
     def __init__(self):
         GPIO.setmode(GPIO.BCM)
         print("GPIO mode set to BCM")
@@ -20,3 +24,27 @@ class myGPIO:
     def cleanup(self):
         print("Exiting ...resetting GPIO.")
         GPIO.cleanup()
+
+    def setwarnings(x):
+        GPIO.setwarnings(x)
+
+    def setup(pin,dir):
+        GPIO.setup(pin,dir)
+
+    def remove_event_detect(pin):
+        GPIO.remove_event_detect(pin)
+
+    def add_event_detect(pin,edge): # Add more variables
+        GPIO.remove_event_detect(pin)
+
+    def output(pin,val):
+        GPIO.output(pin,val)
+
+    def PWM(pin,val):
+        return GPIO.PWM(pin,val)
+
+    def input(pin):
+        return GPIO.input(pin)
+    
+    
+        

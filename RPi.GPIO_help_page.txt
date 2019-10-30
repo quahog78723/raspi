@@ -31,39 +31,6 @@ CLASSES
      |  stop(...)
      |      Stop software PWM
 
-PACKAGE CONTENTS
-
-
-CLASSES
-    builtins.object
-        PWM
-    
-    class PWM(builtins.object)
-     |  Pulse Width Modulation class
-     |  
-     |  Methods defined here:
-     |  
-     |  ChangeDutyCycle(...)
-     |      Change the duty cycle
-     |      dutycycle - between 0.0 and 100.0
-     |  
-     |  ChangeFrequency(...)
-     |      Change the frequency
-     |      frequency - frequency in Hz (freq > 1.0)
-     |  
-     |  __init__(self, /, *args, **kwargs)
-     |      Initialize self.  See help(type(self)) for accurate signature.
-     |  
-     |  __new__(*args, **kwargs) from builtins.type
-     |      Create and return a new object.  See help(type) for accurate signature.
-     |  
-     |  start(...)
-     |      Start software PWM
-     |      dutycycle - the duty cycle (0.0 to 100.0)
-     |  
-     |  stop(...)
-     |      Stop software PWM
-
 FUNCTIONS
     add_event_callback(...)
         Add a callback for an event already defined using add_event_detect()
