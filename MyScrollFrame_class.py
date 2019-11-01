@@ -8,10 +8,10 @@ class MyScrollFrame(tk.Frame):
        call the update() method to refresh the scrollable area.
     """
 
-    def __init__(self, frame, width=60):
+    def __init__(self, frame, width=16):
 
         scrollbar = tk.Scrollbar(frame, width=width)
-        scrollbar.pack(side=tk.RIGHT, fill=tk.Y, expand=False)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y, expand=False) 
 
         self.canvas = tk.Canvas(frame, yscrollcommand=scrollbar.set)
         self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
@@ -38,3 +38,4 @@ class MyScrollFrame(tk.Frame):
 
         self.update_idletasks()
         self.canvas.config(scrollregion=self.canvas.bbox(self.windows_item))
+       # self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)  ###########################

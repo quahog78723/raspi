@@ -69,7 +69,7 @@ PIN_LIST        = [[2,'I2C'],   \
 #---------------
 
 def create_DB_Header():
-        master.title(DB_WINDOW_TITLE)
+        root.title(DB_WINDOW_TITLE)
 
         # Add labels to header frame
         tk.Label(scr_body,text = "PIN ID",  fg='blue',padx=COL_PAD,width=P_NM_COL_W).grid(row=0,column=P_NM_COL)
@@ -116,13 +116,14 @@ def set_widget_vars(pin):
 if not NO_GPIO:
         gpio = MYGPIO.myGPIO()  # My class to initialize GPIO
 
-master = tk.Tk()          # Initialize gui
+root = tk.Tk()          # Initialize gui
+root.geometry('600x600')
 #header = ttk.Frame(master) ##############
-body = ttk.Frame(master) ################
+body = ttk.Frame(root) ################
 #footer = ttk.Frame(master) ################
 
 #header.pack() #####################
-body.pack() #####################
+body.pack(fill=tk.BOTH,expand=True) #####################
 #footer.pack() #####################
 
 #ttk.Label(header,text="The header").pack() #####################
@@ -130,8 +131,8 @@ body.pack() #####################
 
 scr_body = MSF.MyScrollFrame(body, width=16) #####################
 
-root = Canvas(master,width=600,height=100)
-root.pack()
+#root = Canvas(master,width=600,height=100)
+#root.pack()
 #vsb = Scrollbar(root,orient="vertical")
 #vsb.pack(side="right")
 create_DB_Header()
