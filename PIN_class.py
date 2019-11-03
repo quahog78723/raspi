@@ -1,13 +1,13 @@
 # The PIN class provides a simple way to interface with individual GPIO PINs and will maintain
 # various attributes associated with the PIN.
 
-#import RPi.GPIO as GPIO                                        # Use RPi.GPIO module and reference as GPIO
+import RPi.GPIO as GPIO                                        # Use RPi.GPIO module and reference as GPIO
 
 class PIN:              # Define PIN class
         # --------------
         # class variables (constants)
         # --------------
-        NO_GPIO = True         # Used for debugging GUI without calling GPIO
+        NO_GPIO = False         # Used for debugging GUI without calling GPIO
 
         UNDEFINED       = -1    # Used for direction or high/low status
         PWM             = 2     # Putput with PWM enabled

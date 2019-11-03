@@ -1,16 +1,16 @@
 import  tkinter         as tk
-from    tkinter         import ttk as ttk #################### *
-from tkinter import *   ########################
+from    tkinter         import ttk as ttk 
+from    tkinter         import *   
 from    tkinter.ttk     import *   # Enhanced widgets????
 import  PIN_class       as PIN
 import  MyScrollFrame_class as MSF
-#import  MY_GPIO_class   as MYGPIO
+import  MY_GPIO_class   as MYGPIO
 
 # --------------
 # Constant definitions
 # --------------
 
-NO_GPIO         = True # Set to True to test program GUI with no GPIO calls
+NO_GPIO         = False  # Set to True to test program GUI with no GPIO calls
 NUM_PINS        = 26    # Number of pins to be shown in dashboard
 P_NM_COL_W      = 10    # Pin name column width
 P_RB_COL_W      = 4     # Radiobutton column width
@@ -76,7 +76,6 @@ def create_DB_Header():
         tk.Label(scr_body,text = " ",       fg='blue',padx=COL_PAD,width=COL_PAD).grid(row=0,column=1)
         tk.Label(scr_body,text = "IN/OUT",  fg='blue',padx=COL_PAD,width=P_RB_COL_W).grid(row=0,column=DIR_IO_COL)
         tk.Label(scr_body,text = "HIGH",    fg='blue',padx=COL_PAD,width=P_RB_COL_W).grid(row=0,column=OUT_HIGH_COL)
-#        tk.Label(scr_body,text = "PWM",     fg='blue',padx=COL_PAD,width=P_RB_COL_W).grid(row=0,column=PWM_COL)
         tk.Label(scr_body,text = "FREQ",    fg='blue',padx=COL_PAD,width=P_RB_COL_W).grid(row=0,column=FREQ_COL)
         tk.Label(scr_body,text = "D_CYC",   fg='blue',padx=COL_PAD,width=P_RB_COL_W).grid(row=0,column=D_CYC_COL)
         tk.Label(scr_body,text = " ",       fg='blue',padx=COL_PAD,width=COL_PAD).grid(row=0,column=7)
@@ -93,9 +92,6 @@ def set_widget_vars(pin):
 
         vCB_out = tk.IntVar(pin.LOW)            # Create variable for output-high button
         pin.set_OUT_var(vCB_out)                
-
-#        vCB_pwm = tk.IntVar(pin.PWM_OFF)        # Create variable for PWM chkbox
-#        pin.set_PWM_var(vCB_pwm)                
 
         vSB_freq = tk.StringVar("")             # Frequency 
         pin.set_FREQ_var(vSB_freq)           
@@ -116,25 +112,14 @@ def set_widget_vars(pin):
 if not NO_GPIO:
         gpio = MYGPIO.myGPIO()  # My class to initialize GPIO
 
-root = tk.Tk()          # Initialize gui
-root.geometry('600x600')
-#header = ttk.Frame(master) ##############
-body = ttk.Frame(root) ################
-#footer = ttk.Frame(master) ################
+root            = tk.Tk()          # Initialize gui
+root.geometry('700x600')
 
-#header.pack() #####################
-body.pack(fill=tk.BOTH,expand=True) #####################
-#footer.pack() #####################
+body            = ttk.Frame(root) 
+body.pack(fill=tk.BOTH,expand=True)
 
-#ttk.Label(header,text="The header").pack() #####################
-#ttk.Label(footer,text="The footer").pack() #####################
+scr_body        = MSF.MyScrollFrame(body, width=16) 
 
-scr_body = MSF.MyScrollFrame(body, width=16) #####################
-
-#root = Canvas(master,width=600,height=100)
-#root.pack()
-#vsb = Scrollbar(root,orient="vertical")
-#vsb.pack(side="right")
 create_DB_Header()
 
 # Initialize pins
@@ -149,9 +134,6 @@ for p in PIN_LIST:
         vCB_out = tk.IntVar(pin.LOW)    # Create variable for output-high button
         pin.set_OUT_var(vCB_out)        # Set pin to LOW#
 
-#        vCB_pwm = tk.IntVar(pin.PWM_OFF)# Create variable for PWM chkbox
-#        pin.set_PWM_var(vCB_pwm)        # Set pin to LOW
-
         vSB_freq = tk.StringVar("")              
         pin.set_FREQ_var(vSB_freq)           
 
@@ -159,15 +141,14 @@ for p in PIN_LIST:
         pin.set_DCYC_var(vSB_dcyc)           
 
         vEdge = tk.StringVar("")
-#        vEdge.set(EDGE_OPTS[0])
         pin.set_EDGE_var(vEdge)
-#
+
         vBounce = tk.StringVar("")
-#        vBounce.set(BOUNCE_OPTS[0])
         pin.set_BOUNCE_var(vBounce)
         
         
         # Add lbl(pin name) and other controls for each button
+
         pin_name    = tk.Label(scr_body,padx=COL_PAD,width=P_NM_COL_W,text = "PIN-"+str(pin_num)+" "+p[1])
         if p[1] == "PCM":
                 pin_name.config(bg=PCM_COLOR)
@@ -192,7 +173,6 @@ for p in PIN_LIST:
         pwmFrame = tk.Frame(scr_body,relief=GROOVE,borderwidth=1,bg='black',height=1)
         pwmFrame.grid(row=pin_num-1,column=FREQ_COL,columnspan=2)
         
-#        cbox_pwm        = tk.Checkbutton(pwmFrame,width=3,variable=pin.get_PWM_var(),onvalue=1,offvalue=0,command=pin.pwm_selected)
         sbox_freq       = tk.Spinbox(pwmFrame,bd=1,width=5,from_=0,to=100,increment=5,textvariable=pin.get_FREQ_var(),command=pin.freq_selected)
         sbox_dcyc       = tk.Spinbox(pwmFrame,bd=1,width=5,from_=0,to=100,increment=5,textvariable=pin.get_DCYC_var(),command=pin.dcyc_selected)
         sbox_freq.config(state='disabled')
@@ -202,10 +182,6 @@ for p in PIN_LIST:
         oMenu_edge      = tk.OptionMenu(scr_body,pin.get_EDGE_var(),*EDGE_OPTS)
         oMenu_edge.config(width=9,height=1)
 
-    #    oMenu_bounce   = tk.OptionMenu(scr_body,vBounce,"0","100","200")
-    #    oMenu_bounce.config(width=9)
-
-#        scale_bounce = tk.Scale(scr_body,vBounce,from_=1,to=100)
         scale_bounce    = tk.Scale(scr_body,variable=pin.get_BOUNCE_var(),from_=1,to=200,orient=HORIZONTAL,command=pin.bounce_selected,bigincrement=10)
         
         # Position GUI elements
@@ -213,26 +189,22 @@ for p in PIN_LIST:
         pin_name.grid(row=pin_num-1,column=P_NM_COL)
         oMenu_dir.grid(row=pin_num-1,column=DIR_IO_COL)
         cbox_high.grid(row=pin_num-1,column=OUT_HIGH_COL)
-#        cbox_pwm.grid(row=pin_num-1,column=0)   # Column within PWM frame?
         sbox_freq.grid(row=pin_num-1,column=1)  # Column within PWM frame?
         sbox_dcyc.grid(row=pin_num-1,column=2)  # Column within PWM frame?
         oMenu_edge.grid(row=pin_num-1,column=EDGE_COL)
-        
-     #   oMenu_bounce.grid(row=pin_num-1,column=BOUNCE_COL)
         scale_bounce.grid(row=pin_num-1,column=BOUNCE_COL)
-
 
         # More GUI initializtion stuff
 
-        if pin.get_direction() != pin.OUTPUT_TXT:# If direction is not output, 
+        if pin.get_direction() != pin.OUTPUT_TXT:       # If direction is not output, 
                 cbox_high.config(state=DISABLED)        # disable checkbox
-        pin.set_CB_OH(cbox_high)                      # Store linkto checkbox object in pin instance
-#        pin.set_CB_PWM(cbox_pwm)
+        pin.set_CB_OH(cbox_high)                        # Store linkto checkbox object in pin instance
         pin.set_SB_FREQ(sbox_freq)
         pin.set_SB_DCYC(sbox_dcyc)
         pin.set_OM_EDGE(oMenu_edge)
-      #  pin.set_OM_BOUNCE(oMenu_bounce)
         pin.set_OM_BOUNCE(scale_bounce) 
+
+
 scr_body.update()
 root.mainloop()
 
