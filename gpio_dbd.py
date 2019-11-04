@@ -178,7 +178,7 @@ for p in PIN_LIST:
     # Add slider/scale for bounce selection (for event detection)
     scale_bounce = tk.Scale(scr_body,variable=pin.get_BOUNCE_var(),from_=1,to=200,orient=HORIZONTAL,command=pin.bounce_selected,bigincrement=10)
     scale_bounce.config(state='disabled')
-    pin.set_OM_BOUNCE(scale_bounce)
+    pin.set_SL_BOUNCE(scale_bounce)
     scale_bounce.grid(row=p[0]-1,column=BOUNCE_COL)
         
 
